@@ -1,12 +1,14 @@
 import React, { useState } from "react";
-import { Container, Typography, Box, TextField, Button } from "@mui/material";
+import { Container, Typography, Box, TextField, Button, MenuItem } from "@mui/material";
 import { Link } from "react-router-dom";
 import AppTheme from "../shared-theme/AppTheme";
 
 const SignUp = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [userType, setUserType] = useState("");
 
   return (
     <AppTheme>
@@ -29,7 +31,7 @@ const SignUp = () => {
             sx={{
               fontWeight: "bold",
               color: "#006400", // Verde oscuro
-            textShadow: "2px 2px 4px white, -2px -2px 4px white" // Borde blanco
+              textShadow: "2px 2px 4px white, -2px -2px 4px white" // Borde blanco
             }}
           >
             ECO-POLI
@@ -43,9 +45,17 @@ const SignUp = () => {
               bgcolor: "white",
               textAlign: "center",
             }}>
-            <Typography variant="h4"gutterBottom>
-            Crear una cuenta
-          </Typography>
+            <Typography variant="h4" gutterBottom>
+              Crear una cuenta
+            </Typography>
+            <TextField
+              fullWidth
+              label="Nombre de usuario"
+              variant="outlined"
+              margin="normal"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+            />
             <TextField
               fullWidth
               label="Correo Electrónico"
@@ -72,6 +82,19 @@ const SignUp = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
+            <TextField
+              select
+              fullWidth
+              label="Tipo de usuario"
+              variant="outlined"
+              margin="normal"
+              value={userType}
+              onChange={(e) => setUserType(e.target.value)}
+            >
+              <MenuItem value="Estudiante">Estudiante</MenuItem>
+              <MenuItem value="Docente">Docente</MenuItem>
+              <MenuItem value="Personal de limpieza">Personal de limpieza</MenuItem>
+            </TextField>
 
             {/* Botón Registrarse */}
             <Button
@@ -90,7 +113,7 @@ const SignUp = () => {
             {/* Enlace para iniciar sesión */}
             <Typography sx={{ mt: 2 }}>
               <Link to="/" style={{ color: "#2E7D32", fontWeight: "bold" }}>
-               ¿Ya estas registrado?
+                ¿Ya estás registrado?
               </Link>
             </Typography>
           </Box>
