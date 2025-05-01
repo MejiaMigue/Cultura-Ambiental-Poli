@@ -61,7 +61,7 @@ const Home = () => {
           <Box sx={{ mb: 4 }}>
             <Button
               component={RouterLink}
-              to="/"
+              to="/signin"
               variant="contained"
               sx={{
                 backgroundColor: "#4CAF50",

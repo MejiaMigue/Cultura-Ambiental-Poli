@@ -72,7 +72,7 @@ const ForgotPassword = () => {
             </Button>
               {/* Enlace para iniciar sesión */}
             <Typography sx={{ mt: 2 }}>
-              <Link to="/" style={{ color: "#2E7D32", fontWeight: "bold" }}>
+              <Link to="/signin" style={{ color: "#2E7D32", fontWeight: "bold" }}>
                Volver
               </Link>
             </Typography>

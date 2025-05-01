@@ -1,6 +1,13 @@
 import React, { useState } from "react";
-import { Container, Typography, Box, TextField, Button, MenuItem } from "@mui/material";
-import { Link } from "react-router-dom";
+import {
+  Container,
+  Typography,
+  Box,
+  TextField,
+  Button,
+  MenuItem,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
 import AppTheme from "../shared-theme/AppTheme";
 
 const SignUp = () => {
@@ -9,42 +16,88 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [userType, setUserType] = useState("");
+  const navigate = useNavigate(); // Para redireccionar
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (password !== confirmPassword) {
+      alert("Las contraseñas no coinciden.");
+      return;
+    }
+
+    try {
+      const response = await fetch("https://proyecto-integrador-backend-v0zr.onrender.com/api/1.0/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          username,
+          email,
+          password,
+          userType,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Error en el registro");
+      }
+
+      const data = await response.json();
+
+      // Guardar el token y el usuario en localStorage
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+
+      alert("Registro exitoso");
+
+      // Redireccionar al login o a la vista principal
+      navigate("/signin"); // cambia esto según tu ruta
+    } catch (error) {
+      console.error("Error:", error);
+      alert(error.message);
+    }
+  };
 
   return (
     <AppTheme>
       <Box
         sx={{
-          height: "100vh", // Ajuste para evitar scroll
+          height: "100vh",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "linear-gradient(to bottom, #2E7D32, #FFFFFF)", // Degradado verde a blanco
+          background: "linear-gradient(to bottom, #2E7D32, #FFFFFF)",
           textAlign: "center",
           padding: 2,
         }}
       >
         <Container maxWidth="xs">
-          {/* ECO-POLI Título */}
           <Typography
             variant="h2"
             gutterBottom
             sx={{
               fontWeight: "bold",
-              color: "#006400", // Verde oscuro
-              textShadow: "2px 2px 4px white, -2px -2px 4px white" // Borde blanco
+              color: "#006400",
+              textShadow: "2px 2px 4px white, -2px -2px 4px white",
             }}
           >
             ECO-POLI
           </Typography>
 
-          {/* Formulario */}
-          <Box component="form" sx={{
+          <Box
+            component="form"
+            onSubmit={handleSubmit}
+            sx={{
               p: 4,
               borderRadius: 2,
               boxShadow: 3,
               bgcolor: "white",
               textAlign: "center",
-            }}>
+            }}
+          >
             <Typography variant="h4" gutterBottom>
               Crear una cuenta
             </Typography>
@@ -93,26 +146,27 @@ const SignUp = () => {
             >
               <MenuItem value="Estudiante">Estudiante</MenuItem>
               <MenuItem value="Docente">Docente</MenuItem>
-              <MenuItem value="Personal de limpieza">Personal de limpieza</MenuItem>
+              <MenuItem value="Personal de limpieza">
+                Personal de limpieza
+              </MenuItem>
             </TextField>
 
-            {/* Botón Registrarse */}
             <Button
+              type="submit"
               variant="contained"
               fullWidth
               sx={{
                 mt: 2,
-                backgroundColor: "#4CAF50", // Verde claro
+                backgroundColor: "#4CAF50",
                 color: "white",
-                "&:hover": { backgroundColor: "#45a049" }, // Verde más oscuro en hover
+                "&:hover": { backgroundColor: "#45a049" },
               }}
             >
               Registrarse
             </Button>
 
-            {/* Enlace para iniciar sesión */}
             <Typography sx={{ mt: 2 }}>
-              <Link to="/" style={{ color: "#2E7D32", fontWeight: "bold" }}>
+              <Link to="/signin" style={{ color: "#2E7D32", fontWeight: "bold" }}>
                 ¿Ya estás registrado?
               </Link>
             </Typography>
@@ -124,4 +178,5 @@ const SignUp = () => {
 };
 
 export default SignUp;
+
 
